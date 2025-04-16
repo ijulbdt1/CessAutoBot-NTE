@@ -5,17 +5,13 @@ import ora from 'ora';
 import fs from 'fs/promises';
 import readline from 'readline';
 import FormData from 'form-data';
-import pkgHttps from 'https-proxy-agent';
-const { HttpsProxyAgent } = pkgHttps;
-import pkgSocks from 'socks-proxy-agent';
-const { SocksProxyAgent } = pkgSocks;
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { SocksProxyAgent } from 'socks-proxy-agent';
 
-// Delay (dalam detik)
 function delay(seconds) {
   return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
 
-// Tampilkan teks di tengah terminal
 function centerText(text, color = 'greenBright') {
   const terminalWidth = process.stdout.columns || 80;
   const textLength = text.length;
@@ -23,12 +19,10 @@ function centerText(text, color = 'greenBright') {
   return ' '.repeat(padding) + chalk[color](text);
 }
 
-// Cetak garis pemisah
 function printSeparator() {
   console.log(chalk.bold.cyanBright('================================================================================'));
 }
 
-// Daftar User-Agent
 const userAgents = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, seperti Gecko) Chrome/134.0.0.0 Safari/537.36',
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, seperti Gecko) Version/15.1 Safari/605.1.15',
@@ -40,7 +34,6 @@ function getRandomUserAgent() {
   return userAgents[Math.floor(Math.random() * userAgents.length)];
 }
 
-// Membuat headers standar untuk request
 function getHeaders(token = null, isMultipart = false) {
   const headers = {
     'User-Agent': getRandomUserAgent(),
@@ -55,7 +48,6 @@ function getHeaders(token = null, isMultipart = false) {
   return headers;
 }
 
-// Konfigurasi axios dengan dukungan proxy
 function getAxiosConfig(proxy, token = null, isMultipart = false) {
   const config = {
     headers: getHeaders(token, isMultipart),
@@ -68,7 +60,6 @@ function getAxiosConfig(proxy, token = null, isMultipart = false) {
   return config;
 }
 
-// Membuat agent proxy untuk HTTP/HTTPS dan SOCKS
 function newAgent(proxy) {
   if (proxy.startsWith('http://') || proxy.startsWith('https://')) {
     return new HttpsProxyAgent(proxy);
@@ -80,7 +71,6 @@ function newAgent(proxy) {
   }
 }
 
-// Request dengan retry (maks. 3 kali)
 async function requestWithRetry(method, url, payload = null, config = {}, retries = 3, backoff = 2000) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -145,7 +135,6 @@ function askQuestion(query) {
   }));
 }
 
-// === Inisialisasi Konfigurasi (hanya dipanggil sekali) ===
 let globalUseProxy = false;
 let globalProxies = [];
 
@@ -161,7 +150,6 @@ async function initializeConfig() {
   }
 }
 
-// === Fungsi Proses Token per Akun ===
 async function processToken(token, index, total, proxy = null) {
   console.log();
   printSeparator();
@@ -183,8 +171,8 @@ async function processToken(token, index, total, proxy = null) {
   const uuid = accountData.uuid;
   const wallet = accountData.account;
   console.log(chalk.whiteBright(`Username   : ${username}`));
-  console.log(chalk.whiteBright(`UUID   : ${uuid}`));
-  console.log(chalk.whiteBright(`Wallet : ${wallet}`));
+  console.log(chalk.whiteBright(`UUID       : ${uuid}`));
+  console.log(chalk.whiteBright(`Wallet     : ${wallet}`));
   const ip = await getPublicIP(proxy);
   console.log(chalk.whiteBright(`IP yang digunakan: ${ip}`));
   printSeparator();
@@ -280,7 +268,7 @@ async function runCycle() {
 }
 
 async function run() {
-  cfonts.say('Daily Checkin', {
+  cfonts.say('NT EXHAUST', {
     font: 'block',
     align: 'center',
     colors: ['cyan', 'magenta'],
