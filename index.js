@@ -39,8 +39,8 @@ function getHeaders(token = null, isMultipart = false) {
     'User-Agent': getRandomUserAgent(),
     'Accept': 'application/json, text/plain, */*',
     ...(isMultipart ? {} : { 'Content-Type': 'application/json' }),
-    'Origin': 'https://monadscore.xyz',
-    'Referer': 'https://monadscore.xyz/'
+    'Origin': 'https://cess.network',
+    'Referer': 'https://cess.network/'
   };
   if (token) {
     headers['token'] = token;
